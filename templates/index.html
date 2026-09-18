@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}ElderGuard AI | Smart Safety{% endblock %}
+{% block content %}
+<section class="hero-section">
+  <div class="container py-5">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <span class="eyebrow">Detect → Confirm → Assess → Alert → Assist</span>
+        <h1 class="display-4 fw-bold">Smart Safety & Emergency Assistance for Elderly People</h1>
+        <p class="lead mt-3 text-muted">
+          ElderGuard AI does not just send an SOS. It analyzes the emergency, confirms the elderly person's condition, and escalates the alert when help is needed.
+        </p>
+        <div class="d-flex gap-3 flex-wrap mt-4">
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4">Get Started</a>
+          <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg px-4">Login</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-card text-center">
+          <div class="hero-icon">🛡️</div>
+          <div class="mt-3">
+            <h3>Emergency protection</h3>
+            <p class="text-muted">Large SOS actions, voice help, AI analysis, and caregiver escalation built for real-world safety.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <h2>How it works</h2>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon">🚨</div>
+        <h4>1. Trigger</h4>
+        <p>The elderly person presses SOS or speaks to the system.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h4>2. Analyze</h4>
+        <p>The app reviews the emergency with a transparent AI classification module.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-icon">👨‍👩‍👧‍👦</div>
+        <h4>3. Escalate</h4>
+        <p>The system confirms the elderly person’s condition and alerts caregivers if help is needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="text-center mb-5">
+    <h2>Key features</h2>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-4">
+      <div class="feature-card"><div class="feature-icon">📣</div><h4>Voice assistance</h4><p>Use the microphone to describe the event in simple words.</p></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="feature-card"><div class="feature-icon">🧠</div><h4>AI severity check</h4><p>Classify emergencies as NORMAL, WARNING, or CRITICAL.</p></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="feature-card"><div class="feature-icon">✅</div><h4>Confirmation flow</h4><p>Ask, “Are you okay?” before sending a full caregiver alert.</p></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="feature-card"><div class="feature-icon">📍</div><h4>Location-aware alerts</h4><p>Capture approximate coordinates when available and a manual location text fallback.</p></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="feature-card"><div class="feature-icon">🧾</div><h4>Emergency history</h4><p>Review previous incidents, status, and resolution details.</p></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="feature-card"><div class="feature-icon">🔔</div><h4>Caregiver notifications</h4><p>Keep family members informed with unread notification tracking.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="text-center mb-4">
+    <h2>Future scope</h2>
+  </div>
+  <div class="row g-3">
+    {% for item in ['Automatic fall detection using smart watches and motion sensors', 'Camera-based monitoring and heart-rate tracking', 'Multilingual AI voice and offline emergency mode', 'SMS and hospital/ambulance integration'] %}
+    <div class="col-md-6">
+      <div class="badge-box">{{ item }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

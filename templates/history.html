@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Emergency History{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Emergency History</h1>
+  <div class="card shadow-sm mb-3 border-0">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3"><input class="form-control" type="date" placeholder="Date"></div>
+        <div class="col-md-3"><select class="form-select"><option>Severity</option><option>NORMAL</option><option>WARNING</option><option>CRITICAL</option></select></div>
+        <div class="col-md-3"><select class="form-select"><option>Status</option><option>ACTIVE</option><option>RESOLVED</option></select></div>
+        <div class="col-md-3"><select class="form-select"><option>Category</option><option>Fall</option><option>Injury</option><option>Dizziness</option></select></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="table-responsive">
+      <table class="table mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Emergency Type</th>
+            <th>Severity</th>
+            <th>Status</th>
+            <th>Response</th>
+            <th>Description</th>
+            <th>Resolution Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if emergencies %}
+            {% for item in emergencies %}
+            <tr>
+              <td>{{ item.created_at[:10] }}</td>
+              <td>{{ item.created_at[11:19] }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.severity }}</td>
+              <td>{{ item.status }}</td>
+              <td>{{ item.confirmation_status }}</td>
+              <td>{{ item.description }}</td>
+              <td>{{ item.resolved_at or 'Pending' }}</td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="8" class="text-center py-4 text-muted">No emergency history yet.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

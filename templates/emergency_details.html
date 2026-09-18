@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Emergency Details{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Emergency Details</h2>
+            <span class="severity-badge {% if emergency.severity == 'CRITICAL' %}critical{% elif emergency.severity == 'WARNING' %}warning{% else %}normal{% endif %}">
+              {{ emergency.severity }}
+            </span>
+          </div>
+
+          <dl class="row mb-0">
+            <dt class="col-sm-5">Elderly name</dt>
+            <dd class="col-sm-7">{{ elderly.name }}</dd>
+
+            <dt class="col-sm-5">Age</dt>
+            <dd class="col-sm-7">{{ elderly.age }}</dd>
+
+            <dt class="col-sm-5">Contact number</dt>
+            <dd class="col-sm-7">{{ elderly.phone }}</dd>
+
+            <dt class="col-sm-5">Emergency type</dt>
+            <dd class="col-sm-7">{{ emergency.category }}</dd>
+
+            <dt class="col-sm-5">Description</dt>
+            <dd class="col-sm-7">{{ emergency.description }}</dd>
+
+            <dt class="col-sm-5">Time</dt>
+            <dd class="col-sm-7">{{ emergency.created_at }}</dd>
+
+            <dt class="col-sm-5">Location</dt>
+            <dd class="col-sm-7">{{ emergency.location_text or 'Not provided' }}</dd>
+
+            <dt class="col-sm-5">AI analysis</dt>
+            <dd class="col-sm-7">{{ emergency.category }} / {{ emergency.severity }}</dd>
+
+            <dt class="col-sm-5">Confirmation status</dt>
+            <dd class="col-sm-7">{{ emergency.confirmation_status }}</dd>
+
+            <dt class="col-sm-5">Response status</dt>
+            <dd class="col-sm-7">{{ emergency.status }}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h4>Actions</h4>
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-lg" data-action="acknowledge">Acknowledge</button>
+            <button class="btn btn-success btn-lg" data-action="resolve">Mark Resolved</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('click', async function (event) {
+    const action = event.target.getAttribute('data-action');
+    if (!action) return;
+    const endpoint = action === 'acknowledge' ? '/caregiver/emergency/{{ emergency.id }}/acknowledge' : '/caregiver/emergency/{{ emergency.id }}/resolve';
+    const response = await fetch(endpoint, { method: 'POST' });
+    const data = await response.json();
+    alert(data.message || 'Updated');
+    window.location.href = '{{ url_for("caregiver_dashboard") }}';
+  });
+</script>
+{% endblock %}

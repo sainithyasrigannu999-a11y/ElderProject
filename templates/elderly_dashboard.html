@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Elder Dashboard{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row align-items-center mb-4">
+    <div class="col-md-8">
+      <h1>Hello, {{ user.name }}</h1>
+      <p class="lead text-muted">Your safety dashboard</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <span class="status-pill status-{{ status.lower() }}">{{ status }}</span>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="info-card">
+        <h4>Emergency status</h4>
+        <p class="status-text">{{ status }}</p>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="info-card">
+        <h4>Quick action</h4>
+        <button id="sosButton" class="sos-button">🚨 SOS – I NEED HELP</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-lg-6">
+      <div class="info-card mb-4">
+        <h4>Caregiver connection</h4>
+        <p class="text-muted">Link your caregiver so alerts reach the right person.</p>
+
+        <form method="post" action="{{ url_for('connect_caregiver') }}" class="row g-2">
+          <div class="col-md-12">
+            <label class="form-label">Caregiver Email</label>
+            <input class="form-control" type="email" name="caregiver_email" placeholder="caregiver@example.com">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Caregiver Phone</label>
+            <input class="form-control" type="tel" name="caregiver_phone" placeholder="5550000000">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Caregiver Name</label>
+            <input class="form-control" type="text" name="caregiver_name" placeholder="Full name">
+          </div>
+          <div class="col-md-12 mt-2">
+            <button type="submit" class="btn btn-outline-primary">Link Caregiver</button>
+          </div>
+        </form>
+
+        {% if caregiver_connections %}
+          <div class="mt-3">
+            <strong>Connected caregiver:</strong>
+            {% for connection in caregiver_connections %}
+              <div class="small text-muted mt-1">{{ connection.caregiver_name }} — {{ connection.caregiver_email or connection.caregiver_phone or 'Not provided' }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="info-card">
+        <h4>Speak for Help</h4>
+        <p>Press the microphone and tell us what happened.</p>
+        <button class="btn btn-primary btn-lg voice-btn" id="voiceButton">🎙️ Start Listening</button>
+        <p id="voiceText" class="mt-3 text-muted">You said: </p>
+
+        <div class="mt-3">
+          <label for="voiceManualInput" class="form-label">Or type what happened</label>
+          <textarea id="voiceManualInput" class="form-control" rows="3" placeholder="Example: I fell in the kitchen and I need help."></textarea>
+          <div class="mt-2 d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-primary" id="useManualVoiceBtn" type="button">Use Typed Message</button>
+            <button class="btn btn-outline-secondary" id="clearVoiceInputBtn" type="button">Clear</button>
+          </div>
+        </div>
+
+        <div class="mt-3 d-flex gap-2">
+          <button class="btn btn-success btn-lg" id="analyzeVoiceBtn">Analyze Emergency</button>
+          <button class="btn btn-outline-secondary btn-lg" id="cancelVoiceBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="info-card">
+        <h4>Recent emergencies</h4>
+        {% if emergencies %}
+          <ul class="list-group list-group-flush">
+            {% for item in emergencies[:5] %}
+            <li class="list-group-item">
+              <strong>{{ item.category }}</strong> — {{ item.severity }}<br>
+              <small>{{ item.description }}</small>
+            </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mt-3">No recent emergencies.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="sosModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-card">
+      <div class="modal-body text-center p-4">
+        <h3>Do you need emergency help?</h3>
+        <div class="d-grid gap-2 mt-4">
+          <button class="btn btn-danger btn-lg" id="confirmSosBtn">YES, SEND HELP</button>
+          <button class="btn btn-outline-secondary btn-lg" data-bs-dismiss="modal">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-card">
+      <div class="modal-body text-center p-4">
+        <h3>Are you okay?</h3>
+        <p id="confirmationText">We are checking your emergency.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+          <button class="btn btn-success btn-lg" data-confirm="ok">🟢 I'M OKAY</button>
+          <button class="btn btn-danger btn-lg" data-confirm="help">🔴 I NEED HELP</button>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-outline-dark btn-lg" data-confirm="timeout">No Response</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="alertArea" class="container mt-4"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/voice.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sos.js') }}"></script>
+<script>
+  const confirmationTimeoutSeconds = {{ config.CONFIRMATION_TIMEOUT }};
+</script>
+{% endblock %}

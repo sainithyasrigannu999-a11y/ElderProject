@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Register | ElderGuard AI{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="auth-card">
+        <h2 class="text-center mb-4">Create your account</h2>
+        <form method="post">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Full Name</label>
+              <input class="form-control form-control-lg" type="text" name="name" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input class="form-control form-control-lg" type="email" name="email" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Phone Number</label>
+              <input class="form-control form-control-lg" type="tel" name="phone" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Age</label>
+              <input class="form-control form-control-lg" type="number" min="1" max="120" name="age" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Gender</label>
+              <select class="form-select form-select-lg" name="gender">
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Password</label>
+              <input class="form-control form-control-lg" type="password" name="password" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Confirm Password</label>
+              <input class="form-control form-control-lg" type="password" name="confirm_password" required>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">User Role</label>
+              <select class="form-select form-select-lg" name="role" id="roleSelect">
+                <option value="elderly">Elderly User</option>
+                <option value="caregiver">Caregiver</option>
+              </select>
+            </div>
+            <div class="col-md-6 elder-fields">
+              <label class="form-label">Emergency Contact Name</label>
+              <input class="form-control form-control-lg" type="text" name="emergency_contact_name">
+            </div>
+            <div class="col-md-6 elder-fields">
+              <label class="form-label">Emergency Contact Phone</label>
+              <input class="form-control form-control-lg" type="tel" name="emergency_contact_phone">
+            </div>
+            <div class="col-md-12 elder-fields">
+              <label class="form-label">Emergency Contact Email (optional)</label>
+              <input class="form-control form-control-lg" type="email" name="emergency_contact_email" placeholder="caregiver@example.com">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+  const roleSelect = document.getElementById('roleSelect');
+  const elderFields = document.querySelectorAll('.elder-fields');
+  function updateRoleFields() {
+    const show = roleSelect.value === 'elderly';
+    elderFields.forEach(el => {
+      el.style.display = show ? 'block' : 'none';
+      const input = el.querySelector('input');
+      if (!show && input) input.value = '';
+    });
+  }
+  roleSelect.addEventListener('change', updateRoleFields);
+  updateRoleFields();
+</script>
+{% endblock %}
